@@ -1,46 +1,47 @@
 import { LayoutDashboard, FilePlus, Clock, CheckCircle, Eye, XCircle, LogOut, Users } from 'lucide-react';
 
-export const AdminNavItems = [
+export const CampusAdminNavItems = [
     {
         title: 'Dashboard',
-        href: '/grievance/dashboard',
+        href: '/campus/admin/dashboard',
         icon: <LayoutDashboard className="w-5 h-5" />,
         position: 'top',
     },
     {
         title: 'New Grievance',
-        href: '/grievance/new',
+        href: '/campus/admin/new',
         icon: <FilePlus className="w-5 h-5" />,
         position: 'top',
     },
-    {
-        title: 'Pending Grievance',
-        href: '/grievance/pending',
-        icon: <Clock className="w-5 h-5" />,
-        position: 'top',
-    },
+    // {
+    //     title: 'Pending Grievance',
+    //     href: '/campus/admin/pending',
+    //     icon: <Clock className="w-5 h-5" />,
+    //     position: 'top',
+    // },
     {
         title: 'Resolve Grievance',
-        href: '/grievance/resolve',
+        href: '/campus/admin/resolve',
         icon: <CheckCircle className="w-5 h-5" />,
         position: 'top',
     },
     {
+        //redirect hoke aaya hai, ab usko review ke liye use karenge
         title: 'Review Grievance',
-        href: '/grievance/review',
+        href: '/campus/admin/review',
         icon: <Eye className="w-5 h-5" />,
         position: 'top',
     },
+    // {
+    //     title: 'Redirect Grievance',
+    //     href: '/campus/admin/redirect',
+    //     icon: <Eye className="w-5 h-5" />,
+    //     position: 'top',
+    // },
     {
         title: 'Reject Grievance',
-        href: '/grievance/reject',
+        href: '/campus/admin/reject',
         icon: <XCircle className="w-5 h-5" />,
-        position: 'top',
-    },
-    {
-        title: 'Admins List',
-        href: '/adminlist',
-        icon: <Users className="w-5 h-5" />,
         position: 'top',
     },
     {
