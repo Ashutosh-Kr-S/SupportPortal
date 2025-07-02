@@ -220,11 +220,11 @@ const StudentDashboard = () => {
                   effective grievance submission
                 </p>
                 <Link
-                  href={getRoute("Dashboard")}
-                  className="inline-flex items-center justify-center w-full bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-3 rounded-lg hover:from-orange-700 hover:to-red-700 transform hover:scale-105 transition-all duration-200 text-sm font-medium shadow-md hover:shadow-lg"
-                >
-                  View Guidelines
-                </Link>
+  href="/help&guideline"
+  className="inline-flex items-center justify-center w-full bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-3 rounded-lg hover:from-orange-700 hover:to-red-700 transform hover:scale-105 transition-all duration-200 text-sm font-medium shadow-md hover:shadow-lg"
+>
+  View Guidelines
+</Link>
               </div>
 
               {/* Emergency Contact */}
