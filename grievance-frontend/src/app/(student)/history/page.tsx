@@ -54,6 +54,8 @@ const History = () => {
   const [grievances, setGrievances] = useState<GrievanceResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const [isRetrying, setIsRetrying] = useState(false);
   const [expandedGrievance, setExpandedGrievance] = useState<string | null>(
     null
   );
@@ -70,9 +72,13 @@ const History = () => {
   };
 
   useEffect(() => {
-    const fetchGrievances = async () => {
+    const fetchGrievances = async (attempt = 0) => {
       try {
-        setLoading(true);
+        if (attempt === 0) {
+          setLoading(true);
+        } else {
+          setIsRetrying(true);
+        }
         setError(null);
 
         if (!token) {
@@ -99,14 +105,31 @@ const History = () => {
         if (apiResponse.success) {
           setAllGrievances(apiResponse.data);
           setGrievances(apiResponse.data);
+          setRetryCount(0);
+          setError(null);
         } else {
           throw new Error(apiResponse.message || "Failed to fetch grievances");
         }
       } catch (error) {
         console.error("Error fetching grievances:", error);
-        setError("Failed to load grievance history. Please try again later.");
+
+        // Auto-retry on first few attempts
+        if (attempt < 2) {
+          const nextAttempt = attempt + 1;
+          setRetryCount(nextAttempt);
+          console.log(`Retrying... attempt ${nextAttempt}`);
+
+          // Wait before retrying (1s, 2s, 3s)
+          setTimeout(() => {
+            fetchGrievances(nextAttempt);
+          }, nextAttempt * 1000);
+        } else {
+          setError("Failed to load grievance history. Please try again later.");
+          setRetryCount(attempt);
+        }
       } finally {
         setLoading(false);
+        setIsRetrying(false);
       }
     };
 
@@ -167,27 +190,93 @@ const History = () => {
     }
   };
 
+  const handleManualRetry = () => {
+    setRetryCount(0);
+    setError(null);
+    setLoading(true);
+
+    // Re-trigger the fetch by updating a dependency
+    window.location.reload();
+  };
+
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+      <div className="p-6 bg-gradient-to-br from-blue-50/30 to-white min-h-screen">
+        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-blue-200/50 p-6 mb-6">
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-blue-600">
+                Grievance History
+              </h2>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center justify-center py-16 space-y-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-500"></div>
+            <p className="text-gray-600 text-lg">Loading your grievances...</p>
+            {retryCount > 0 && (
+              <p className="text-sm text-blue-600">
+                {isRetrying
+                  ? `Retrying... (attempt ${retryCount + 1})`
+                  : `Attempted ${retryCount} time${retryCount > 1 ? "s" : ""}`}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[40vh]">
-        <div className="bg-white/95 backdrop-blur-sm border border-blue-200 rounded-xl shadow-lg px-6 py-6 flex flex-col items-center max-w-xs w-full">
-          <AlertTriangle className="w-7 h-7 text-blue-500 mb-2" />
-          <p className="text-gray-700 text-center mb-4 text-sm">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-600 text-white shadow-lg hover:shadow-xl transition-all"
-            aria-label="Refresh"
-          >
-            <RefreshCcw className="w-4 h-4" />
-          </button>
+      <div className="p-6 bg-gradient-to-br from-blue-50/30 to-white min-h-screen">
+        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-blue-200/50 p-6 mb-6">
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-blue-600">
+                Grievance History
+              </h2>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center justify-center py-16 space-y-6">
+            <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center max-w-md">
+              <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-red-800 mb-2">
+                Unable to Load Data
+              </h3>
+              <p className="text-red-600 mb-4 text-sm leading-relaxed">
+                {error}
+              </p>
+              {retryCount > 0 && (
+                <p className="text-xs text-red-500 mb-4">
+                  Failed after {retryCount} attempt{retryCount > 1 ? "s" : ""}
+                </p>
+              )}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  onClick={handleManualRetry}
+                  className="flex items-center justify-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                >
+                  <RefreshCcw className="w-4 h-4 mr-2" />
+                  Try Again
+                </button>
+                <Link
+                  href="/grievance/lodge"
+                  className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Lodge New Grievance
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
