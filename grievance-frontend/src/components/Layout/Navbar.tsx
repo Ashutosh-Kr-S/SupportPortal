@@ -2,17 +2,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import {
-  CircleUserRound,
-  Settings,
-  LogOut,
-  User,
-  Bell
-} from "lucide-react";
+import { CircleUserRound, Settings, LogOut, User, Bell } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { StudentInfo } from "../../types/StudentInfo";
 import { AdminInfo } from "../../types/admin-info";
-
 
 interface NavbarProps {
   className?: string;
@@ -71,7 +64,29 @@ const Navbar = ({ className = "" }: NavbarProps) => {
   const getUserRole = () => {
     if (userType === "admin" && user) {
       const admin = user as AdminInfo;
-      return admin.role[0] || "Admin";
+      const role = admin.role[0];
+
+      // Format role names for display
+      switch (role) {
+        case "superadmin":
+          return "Super Admin";
+        case "campus admin":
+          return "Campus Admin";
+        case "campus academic":
+          return "Campus Academic";
+        case "campus examination":
+          return "Campus Examination";
+        case "campus non-academic":
+          return "Campus Non-Academic";
+        case "university academic":
+          return "University Academic";
+        case "university examination":
+          return "University Examination";
+        case "university non-academic":
+          return "University Non-Academic";
+        default:
+          return role || "Admin";
+      }
     }
     if (userType === "student") return "Student";
     return "Guest";
@@ -98,7 +113,7 @@ const Navbar = ({ className = "" }: NavbarProps) => {
           className="cursor-pointer"
         />
         <span className="ml-3 text-blue-600 font-bold text-lg hidden sm:block">
-          Grievance Portal
+          Student Support Portal
         </span>
       </div>
 

@@ -10,13 +10,13 @@ export const NavItems = [
     {
         title: 'Lodge Grievance',
         href: '/lodge',
-        icon: <Upload className="w-5 h-5" />,
+        icon: <Files className="w-5 h-5" />,
         position: 'top',
     },
     {
         title: 'Grievance History',
         href: '/history',
-        icon: <Files className="w-5 h-5" />,
+        icon: <History className="w-5 h-5" />,
         position: 'top',
     },
     {

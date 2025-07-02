@@ -1,3 +1,13 @@
+export type AdminRole =
+  | "superadmin"
+  | "campus admin"
+  | "campus academic"
+  | "campus examination"
+  | "university academic"
+  | "campus non-academic"
+  | "university examination"
+  | "university non-academic";
+
 export type AdminInfo = {
   AdminId: number;
   name: string;
@@ -8,7 +18,7 @@ export type AdminInfo = {
   LastLogin: string;
   createdAt: string;
   updatedAt: string;
-  role: string[];
+  role: AdminRole[];
   permissions: string[];
   campusId?: number;
 };

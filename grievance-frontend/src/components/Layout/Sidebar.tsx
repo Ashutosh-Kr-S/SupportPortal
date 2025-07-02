@@ -2,8 +2,20 @@
 import React from "react";
 import { NavItems } from "@/styles/constants";
 import { AdminNavItems } from "@/styles/adminConstants";
+import { CampusAdminNavItems } from "@/styles/campusConstants";
+import {
+  CampusAcademicNavItems,
+  CampusNonAcademicNavItems,
+  CampusExamNavItems,
+} from "@/styles/campusDepConstants";
+import {
+  UniversityAcademicNavItems,
+  UniversityExamNavItems,
+  UniversityNonAcademicNavItems,
+} from "@/styles/universityConstants";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { AdminInfo } from "@/types/admin-info";
 
 interface SidebarProps {
   className?: string;
@@ -14,8 +26,42 @@ const Sidebar = ({ className = "" }: SidebarProps) => {
   const router = useRouter();
   const { user, loading, userType } = useAuth();
 
-  // Select navigation items based on user type from auth context
-  const navItems = userType === "admin" ? AdminNavItems : NavItems;
+  // Function to get navigation items based on user type and admin role
+  const getNavItems = () => {
+    if (userType === "student") {
+      return NavItems;
+    }
+
+    if (userType === "admin" && user) {
+      const admin = user as AdminInfo;
+      const adminRole = admin.role[0]; // Get the first role
+
+      switch (adminRole) {
+        case "superadmin":
+          return AdminNavItems;
+        case "campus admin":
+          return CampusAdminNavItems;
+        case "campus academic":
+          return CampusAcademicNavItems;
+        case "campus examination":
+          return CampusExamNavItems;
+        case "campus non-academic":
+          return CampusNonAcademicNavItems;
+        case "university academic":
+          return UniversityAcademicNavItems;
+        case "university examination":
+          return UniversityExamNavItems;
+        case "university non-academic":
+          return UniversityNonAcademicNavItems;
+        default:
+          return AdminNavItems; // Default to superadmin nav items
+      }
+    }
+
+    return NavItems; // Default to student nav items
+  };
+
+  const navItems = getNavItems();
 
   const topNavItems = navItems.filter((item) => item.position === "top");
   const bottomNavItems = navItems.filter((item) => item.position === "bottom");

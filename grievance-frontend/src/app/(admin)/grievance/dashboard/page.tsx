@@ -1,12 +1,12 @@
-import React from 'react'
-import AdminDashboard from '@/components/adminComponents/AdminDashboard'
+import React from "react";
+import RoleBasedDashboard from "@/components/adminComponents/RoleBasedDashboard";
 
 const dashboard = () => {
   return (
     <div>
-      <AdminDashboard/>
+      <RoleBasedDashboard />
     </div>
-  )
-}
+  );
+};
 
-export default dashboard
+export default dashboard;
