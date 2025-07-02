@@ -20,10 +20,18 @@ import { NavItems } from "@/styles/constants";
 const StudentDashboard = () => {
   useAuthRedirect();
 
+  // Error state
+  const [error, setError] = useState<string | null>(null);
+
   // Get routes from constants
   const getRoute = (title: string) => {
-    const item = NavItems.find((item) => item.title === title);
-    return item ? item.href : "#";
+    try {
+      const item = NavItems.find((item) => item.title === title);
+      return item ? item.href : "#";
+    } catch (err) {
+      console.error("Error finding route:", err);
+      return "#";
+    }
   };
 
   const [pendingGrievancenumber, setPendingGrievnacenumber] = useState(0);
@@ -33,10 +41,21 @@ const StudentDashboard = () => {
 
   // Set dummy data on component mount
   useEffect(() => {
-    setPendingGrievnacenumber(3);
-    setResolvedGrievnacenumber(8);
-    setInProgressNumber(2);
-    setTotalGrievances(13);
+    const initializeData = async () => {
+      try {
+        setPendingGrievnacenumber(3);
+        setResolvedGrievnacenumber(8);
+        setInProgressNumber(2);
+        setTotalGrievances(13);
+
+        setError(null);
+      } catch (err) {
+        setError("Failed to load dashboard data");
+        console.error("Dashboard initialization error:", err);
+      }
+    };
+
+    initializeData();
   }, []);
 
   // Mock data for demonstration
@@ -93,6 +112,30 @@ const StudentDashboard = () => {
     },
   ];
 
+  // Error component
+  const ErrorDisplay = () => (
+    <div className="w-full p-4 sm:p-6 md:p-8 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/50 min-h-full">
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-lg font-semibold text-red-800 mb-2">
+            Something went wrong
+          </h2>
+          <p className="text-red-600 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Handle error state
+  if (error) return <ErrorDisplay />;
+
   return (
     <div className="w-full p-4 sm:p-6 md:p-8 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/50 min-h-full">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -107,51 +150,51 @@ const StudentDashboard = () => {
         </div>{" "}
         {/* Quick Stats Row */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-blue-100 shadow-sm hover:border-blue-200 hover:shadow-md transition-all duration-200">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-blue-100 shadow-sm hover:border-blue-200 hover:shadow-md transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total</p>
-                <p className="text-2xl font-bold text-blue-600">
+                <p className="text-2xl font-bold text-blue-600 transition-all duration-500">
                   {totalGrievances}
                 </p>
               </div>
-              <FileText className="w-8 h-8 text-blue-500" />
+              <FileText className="w-8 h-8 text-blue-500 transition-transform duration-300 hover:scale-110" />
             </div>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-orange-100 shadow-sm hover:border-orange-200 hover:shadow-md transition-all duration-200">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-orange-100 shadow-sm hover:border-orange-200 hover:shadow-md transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Pending</p>
-                <p className="text-2xl font-bold text-orange-600">
+                <p className="text-2xl font-bold text-orange-600 transition-all duration-500">
                   {pendingGrievancenumber}
                 </p>
               </div>
-              <Clock className="w-8 h-8 text-orange-500" />
+              <Clock className="w-8 h-8 text-orange-500 transition-transform duration-300 hover:scale-110" />
             </div>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-purple-100 shadow-sm hover:border-purple-200 hover:shadow-md transition-all duration-200">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-purple-100 shadow-sm hover:border-purple-200 hover:shadow-md transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">In Progress</p>
-                <p className="text-2xl font-bold text-purple-600">
+                <p className="text-2xl font-bold text-purple-600 transition-all duration-500">
                   {inProgressNumber}
                 </p>
               </div>
-              <TrendingUp className="w-8 h-8 text-purple-500" />
+              <TrendingUp className="w-8 h-8 text-purple-500 transition-transform duration-300 hover:scale-110" />
             </div>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-green-100 shadow-sm hover:border-green-200 hover:shadow-md transition-all duration-200">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-green-100 shadow-sm hover:border-green-200 hover:shadow-md transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Resolved</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-green-600 transition-all duration-500">
                   {resolvedGrievancenumber}
                 </p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-500" />
+              <CheckCircle className="w-8 h-8 text-green-500 transition-transform duration-300 hover:scale-110" />
             </div>
           </div>
         </div>
@@ -265,13 +308,13 @@ const StudentDashboard = () => {
                 </Link>
               </div>
               <div className="space-y-3">
-                {recentActivities.slice(0, 4).map((activity) => (
+                {recentActivities?.slice(0, 4).map((activity) => (
                   <div
                     key={activity.id}
                     className="flex items-start space-x-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors duration-200"
                   >
                     <div
-                      className={`w-3 h-3 rounded-full mt-2 flex-shrink-0 ${
+                      className={`w-3 h-3 rounded-full mt-2 flex-shrink-0 transition-colors ${
                         activity.status === "resolved"
                           ? "bg-green-500"
                           : activity.status === "responded"
@@ -283,14 +326,19 @@ const StudentDashboard = () => {
                     ></div>
                     <div className="flex-1">
                       <p className="text-sm text-gray-800 leading-relaxed">
-                        {activity.message}
+                        {activity.message || "No message available"}
                       </p>
                       <p className="text-xs text-gray-500 mt-1 font-medium">
-                        {activity.time}
+                        {activity.time || "Unknown time"}
                       </p>
                     </div>
                   </div>
-                ))}
+                )) || (
+                  <div className="text-center py-8 text-gray-500">
+                    <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <p>No recent activities</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -304,23 +352,30 @@ const StudentDashboard = () => {
                 Announcements
               </h3>
               <div className="space-y-3">
-                {announcements.map((announcement) => (
-                  <div
-                    key={announcement.id}
-                    className={`p-3 rounded-lg border-l-4 ${
-                      announcement.urgent
-                        ? "bg-red-50 border-red-500"
-                        : "bg-blue-50 border-blue-500"
-                    }`}
-                  >
-                    <h4 className="font-medium text-sm text-gray-800">
-                      {announcement.title}
-                    </h4>
-                    <p className="text-xs text-gray-600 mt-1">
-                      {announcement.content}
-                    </p>
+                {announcements?.length > 0 ? (
+                  announcements.map((announcement) => (
+                    <div
+                      key={announcement.id}
+                      className={`p-3 rounded-lg border-l-4 transition-colors duration-200 ${
+                        announcement.urgent
+                          ? "bg-red-50 border-red-500 hover:bg-red-100"
+                          : "bg-blue-50 border-blue-500 hover:bg-blue-100"
+                      }`}
+                    >
+                      <h4 className="font-medium text-sm text-gray-800">
+                        {announcement.title || "Untitled Announcement"}
+                      </h4>
+                      <p className="text-xs text-gray-600 mt-1">
+                        {announcement.content || "No content available"}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-6 text-gray-500">
+                    <AlertCircle className="w-6 h-6 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">No announcements</p>
                   </div>
-                ))}
+                )}
               </div>
             </div>
 
