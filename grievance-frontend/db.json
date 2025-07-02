@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "Aiven PostgreSQL",
+            "Group": "Grievance",
+            "Host": "pg-262253a2-amansngh8586-37a6.e.aivencloud.com",
+            "Port": 26066,
+            "MaintenanceDB": "defaultdb",
+            "Username": "avnadmin",
+            "SSLMode": "require"
+        }
+    }
+}

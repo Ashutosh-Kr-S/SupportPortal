@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Remove the default focus outline */
+*:focus {
+  outline: none;
+}
+
+/* Hide the blinking text cursor (caret) globally */
+* {
+  caret-color: transparent;
+}
+
+/* But, show it in inputs and textareas where it's needed */
+input,
+textarea {
+  caret-color: auto;
+}
+

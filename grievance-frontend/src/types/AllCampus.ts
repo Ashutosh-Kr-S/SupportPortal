@@ -1,0 +1,22 @@
+// Campus options with their IDs and exact names from your campusinfo table
+export const campuses = [
+    { id: 1011, code: "ABIT", name: "ARYABHATT DSEU ASHOK VIHAR CAMPUS", isMain: false },
+    { id: 1012, code: "AIT", name: "AMBEDKAR DSEU CAMPUS-I", isMain: false },
+    { id: 1013, code: "BPIBS", name: "BHAI PARMANAND DSEU SHAKARPUR CAMPUS-II", isMain: false },
+    { id: 1014, code: "CDO", name: "CHAMPS DSEU OKHLA CAMPUS", isMain: false },
+    { id: 1015, code: "CVR", name: "SIR C.V. RAMAN DSEU DHEERPUR CAMPUS", isMain: false },
+    { id: 1016, code: "DDC", name: "DSEU DWARKA CAMPUS", isMain: true },
+    { id: 1017, code: "DJC", name: "DSEU JAFFARPUR CAMPUS", isMain: false },
+    { id: 1018, code: "DRC", name: "DSEU RAJOKRI CAMPUS", isMain: false },
+    { id: 1019, code: "DWC", name: "DSEU WAZIRPUR-I CAMPUS", isMain: false },
+    { id: 1020, code: "GBP", name: "G.B. PANT DSEU OKHLA-I CAMPUS", isMain: false },
+    { id: 1021, code: "GND", name: "GURU NANAK DEV DSEU ROHINI CAMPUS", isMain: false },
+    { id: 1022, code: "KDP", name: "KASTURBA DSEU PITAMPURA CAMPUS (FOR GIRLS ONLY)", isMain: false },
+    { id: 1023, code: "MBC", name: "MEERABAI DSEU MAHARANI BAGH CAMPUS (FOR GIRLS ONLY)", isMain: false },
+    { id: 1024, code: "MVC", name: "DR. H.J. BHABHA DSEU MAYUR VIHAR CAMPUS", isMain: false },
+    { id: 1025, code: "OC-II", name: "DSEU OKHLA-II CAMPUS", isMain: false },
+    { id: 1026, code: "PIC", name: "DSEU PUSA CAMPUS-I", isMain: false },
+    { id: 1027, code: "PIC-II", name: "DSEU PUSA CAMPUS-II", isMain: false },
+    { id: 1028, code: "SFC", name: "DSEU SIRI FORT CAMPUS", isMain: false },
+    { id: 1029, code: "VVC", name: "DSEU VIVEK VIHAR CAMPUS", isMain: false },
+  ];
