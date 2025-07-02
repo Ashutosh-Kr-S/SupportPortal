@@ -205,7 +205,15 @@ const Navbar = ({ className = "" }: NavbarProps) => {
               <div className="py-2">
                 <button
                   className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
-                  onClick={() => router.push("/profile")}
+                  onClick={() => {
+                    if (userType === "admin") {
+                      router.push("/adminprofile");
+                    } else if (userType === "student") {
+                      router.push("/profile");
+                    } else {
+                      router.push("/login");
+                    }
+                  }}
                 >
                   <User className="w-4 h-4 mr-3 text-blue-500" />
                   Profile
@@ -215,8 +223,13 @@ const Navbar = ({ className = "" }: NavbarProps) => {
                   Settings
                 </button>
                 <div className="border-t border-blue-100 my-2"></div>
-                <button className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                onClick={logout}>
+                <button
+                  className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  onClick={async () => {
+                    await logout();
+                    router.push("/login");
+                  }}
+                >
                   <LogOut className="w-4 h-4 mr-3" />
                   Logout
                 </button>
