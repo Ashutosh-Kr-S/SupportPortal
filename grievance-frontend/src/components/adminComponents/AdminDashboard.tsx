@@ -17,6 +17,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import CreateAdmins from "@/components/adminComponents/CreateAdmins";
 import { useAuthRedirect } from '@/hooks/useAuthRedirect';
+import { AdminNavItems } from "@/styles/adminConstants";
 
 const AdminDashboard = () => {
 
@@ -74,6 +75,14 @@ const AdminDashboard = () => {
     },
   ];
 
+  // Create route mapping from AdminNavItems
+  const getRouteFromNavItems = (searchTitle: string) => {
+    const navItem = AdminNavItems.find(item => 
+      item.title.toLowerCase().includes(searchTitle.toLowerCase())
+    );
+    return navItem?.href || '#';
+  };
+
   const stats = [
     {
       title: "New Grievances",
@@ -81,7 +90,7 @@ const AdminDashboard = () => {
       change: "+12%",
       icon: FileText,
       color: "blue",
-      href: "/admin/grievance/new",
+      href: getRouteFromNavItems('New Grievance'),
       description: "Awaiting review",
       bgGradient: "from-blue-500 to-cyan-500",
       hoverGradient: "from-blue-600 to-cyan-600",
@@ -92,7 +101,7 @@ const AdminDashboard = () => {
       change: "-5%",
       icon: Clock,
       color: "orange",
-      href: "/admin/grievance/pending",
+      href: getRouteFromNavItems('Pending Grievance'),
       description: "In progress",
       bgGradient: "from-orange-500 to-amber-500",
       hoverGradient: "from-orange-600 to-amber-600",
@@ -103,7 +112,7 @@ const AdminDashboard = () => {
       change: "+23%",
       icon: CheckCircle,
       color: "green",
-      href: "/admin/grievance/resolved",
+      href: getRouteFromNavItems('Resolve Grievance'),
       description: "Successfully completed",
       bgGradient: "from-green-500 to-emerald-500",
       hoverGradient: "from-green-600 to-emerald-600",
@@ -114,7 +123,7 @@ const AdminDashboard = () => {
       change: "0%",
       icon: XCircle,
       color: "red",
-      href: "/admin/grievance/rejected",
+      href: getRouteFromNavItems('Reject Grievance'),
       description: "Invalid submissions",
       bgGradient: "from-red-500 to-rose-500",
       hoverGradient: "from-red-600 to-rose-600",
@@ -339,7 +348,7 @@ const AdminDashboard = () => {
           </div>
           <div className="p-6 bg-gray-50 rounded-b-2xl">
             <Link
-              href="/admin/activity"
+              href={getRouteFromNavItems('Admins List')}
               className="flex items-center justify-center w-full px-4 py-2 text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200"
             >
               View All Activity

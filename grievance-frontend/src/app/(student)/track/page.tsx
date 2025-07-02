@@ -75,14 +75,15 @@ type ApiResponse = {
 
 const TrackGrievance = () => {
   useAuthRedirect();
-  
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const { token } = useAuth();
-  
+
   const grievanceId = searchParams.get("id");
-  
-  const [trackingData, setTrackingData] = useState<GrievanceTrackingData | null>(null);
+
+  const [trackingData, setTrackingData] =
+    useState<GrievanceTrackingData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -125,7 +126,7 @@ const TrackGrievance = () => {
       // );
 
       // Mock data for demonstration
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API delay
 
       const mockTrackingData: GrievanceTrackingData = {
         issue_id: grievanceId || "",
@@ -135,7 +136,8 @@ const TrackGrievance = () => {
           rollno: "22041520",
           campus: "Main Campus",
           subject: "Library WiFi Connectivity Issue",
-          description: "The WiFi in the library is frequently disconnecting, making it difficult to study and access online resources.",
+          description:
+            "The WiFi in the library is frequently disconnecting, making it difficult to study and access online resources.",
           issue_type: "ACADEMIC",
           status: "IN_PROGRESS",
           attachment: "true",
@@ -155,7 +157,7 @@ const TrackGrievance = () => {
             actor_type: "student",
             description: "Grievance submitted successfully",
             status: "SUBMITTED",
-            notes: "Initial submission with attachment"
+            notes: "Initial submission with attachment",
           },
           {
             id: "2",
@@ -165,7 +167,7 @@ const TrackGrievance = () => {
             actor_type: "system",
             description: "Grievance acknowledged and assigned to IT Department",
             status: "ACKNOWLEDGED",
-            notes: "Auto-assigned based on issue category"
+            notes: "Auto-assigned based on issue category",
           },
           {
             id: "3",
@@ -175,7 +177,7 @@ const TrackGrievance = () => {
             actor_type: "admin",
             description: "Admin has started reviewing the grievance",
             status: "UNDER_REVIEW",
-            notes: "Assigned to IT infrastructure team for assessment"
+            notes: "Assigned to IT infrastructure team for assessment",
           },
           {
             id: "4",
@@ -185,7 +187,8 @@ const TrackGrievance = () => {
             actor_type: "admin",
             description: "Technical investigation initiated",
             status: "IN_PROGRESS",
-            notes: "Network infrastructure team has been notified. Site visit scheduled for tomorrow."
+            notes:
+              "Network infrastructure team has been notified. Site visit scheduled for tomorrow.",
           },
           {
             id: "5",
@@ -193,10 +196,12 @@ const TrackGrievance = () => {
             action: "UPDATE_PROVIDED",
             actor: "Network Admin",
             actor_type: "admin",
-            description: "Progress update: Network equipment inspection completed",
+            description:
+              "Progress update: Network equipment inspection completed",
             status: "IN_PROGRESS",
-            notes: "Found issues with router configuration. Ordering replacement equipment. Expected resolution in 2-3 days."
-          }
+            notes:
+              "Found issues with router configuration. Ordering replacement equipment. Expected resolution in 2-3 days.",
+          },
         ],
         current_status: "IN_PROGRESS",
         progress_percentage: 65,
@@ -204,15 +209,15 @@ const TrackGrievance = () => {
         assigned_admin: {
           name: "Dr. Rajesh Kumar",
           role: "IT Department Head",
-          contact: "rajesh.kumar@university.edu"
-        }
+          contact: "rajesh.kumar@university.edu",
+        },
       };
 
       setTrackingData(mockTrackingData);
       setRetryCount(0);
     } catch (error) {
       console.error("Error fetching tracking data:", error);
-      
+
       if (attempt < 2) {
         const nextAttempt = attempt + 1;
         setRetryCount(nextAttempt);
@@ -220,7 +225,9 @@ const TrackGrievance = () => {
           fetchTrackingData(nextAttempt);
         }, nextAttempt * 1000);
       } else {
-        setError("Failed to load grievance tracking data. Please try again later.");
+        setError(
+          "Failed to load grievance tracking data. Please try again later."
+        );
         setRetryCount(attempt);
       }
     } finally {
@@ -271,7 +278,7 @@ const TrackGrievance = () => {
 
   const getTimelineColor = (action: string, actorType: string) => {
     if (actorType === "system") return "bg-gray-500";
-    
+
     switch (action.toUpperCase()) {
       case "SUBMITTED":
         return "bg-blue-500";
@@ -292,12 +299,12 @@ const TrackGrievance = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -316,7 +323,9 @@ const TrackGrievance = () => {
             <h2 className="text-lg font-semibold text-red-800 mb-2">
               Invalid Request
             </h2>
-            <p className="text-red-600 mb-4">No grievance ID provided for tracking.</p>
+            <p className="text-red-600 mb-4">
+              No grievance ID provided for tracking.
+            </p>
             <Link
               href="/history"
               className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -343,15 +352,23 @@ const TrackGrievance = () => {
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to History
               </Link>
-              <h1 className="text-2xl font-bold text-blue-600">Track Grievance</h1>
+              <h1 className="text-2xl font-bold text-blue-600">
+                Track Grievance
+              </h1>
             </div>
-            
+
             <div className="flex flex-col items-center justify-center py-16 space-y-4">
               <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-500"></div>
-              <p className="text-gray-600 text-lg">Loading grievance details...</p>
+              <p className="text-gray-600 text-lg">
+                Loading grievance details...
+              </p>
               {retryCount > 0 && (
                 <p className="text-sm text-blue-600">
-                  {isRetrying ? `Retrying... (attempt ${retryCount + 1})` : `Attempted ${retryCount} time${retryCount > 1 ? 's' : ''}`}
+                  {isRetrying
+                    ? `Retrying... (attempt ${retryCount + 1})`
+                    : `Attempted ${retryCount} time${
+                        retryCount > 1 ? "s" : ""
+                      }`}
                 </p>
               )}
             </div>
@@ -374,19 +391,23 @@ const TrackGrievance = () => {
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to History
               </Link>
-              <h1 className="text-2xl font-bold text-blue-600">Track Grievance</h1>
+              <h1 className="text-2xl font-bold text-blue-600">
+                Track Grievance
+              </h1>
             </div>
-            
+
             <div className="flex flex-col items-center justify-center py-16 space-y-6">
               <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center max-w-md">
                 <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-red-800 mb-2">
                   Unable to Load Tracking Data
                 </h3>
-                <p className="text-red-600 mb-4 text-sm leading-relaxed">{error}</p>
+                <p className="text-red-600 mb-4 text-sm leading-relaxed">
+                  {error}
+                </p>
                 {retryCount > 0 && (
                   <p className="text-xs text-red-500 mb-4">
-                    Failed after {retryCount} attempt{retryCount > 1 ? 's' : ''}
+                    Failed after {retryCount} attempt{retryCount > 1 ? "s" : ""}
                   </p>
                 )}
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -459,7 +480,7 @@ const TrackGrievance = () => {
               Refresh
             </button>
           </div>
-          
+
           <div className="flex items-center gap-4 mb-4">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
               <FileText className="w-6 h-6 text-white" />
@@ -468,20 +489,22 @@ const TrackGrievance = () => {
               <h1 className="text-2xl font-bold text-blue-600">
                 Track Grievance
               </h1>
-              <p className="text-gray-600">
-                ID: {trackingData.issue_id}
-              </p>
+              <p className="text-gray-600">ID: {trackingData.issue_id}</p>
             </div>
           </div>
 
           {/* Progress Bar */}
           <div className="mb-4">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-gray-700">Progress</span>
-              <span className="text-sm text-gray-600">{trackingData.progress_percentage}%</span>
+              <span className="text-sm font-medium text-gray-700">
+                Progress
+              </span>
+              <span className="text-sm text-gray-600">
+                {trackingData.progress_percentage}%
+              </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
-              <div 
+              <div
                 className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500"
                 style={{ width: `${trackingData.progress_percentage}%` }}
               ></div>
@@ -492,14 +515,21 @@ const TrackGrievance = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-600">Current Status:</span>
-              <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${getStatusColor(trackingData.current_status)}`}>
-                {trackingData.current_status.replace('_', ' ')}
+              <span
+                className={`px-3 py-1 text-xs font-semibold rounded-full border ${getStatusColor(
+                  trackingData.current_status
+                )}`}
+              >
+                {trackingData.current_status.replace("_", " ")}
               </span>
             </div>
             {trackingData.estimated_resolution && (
               <div className="text-sm text-gray-600">
                 <Clock className="w-4 h-4 inline mr-1" />
-                Est. Resolution: {new Date(trackingData.estimated_resolution).toLocaleDateString()}
+                Est. Resolution:{" "}
+                {new Date(
+                  trackingData.estimated_resolution
+                ).toLocaleDateString()}
               </div>
             )}
           </div>
@@ -513,35 +543,43 @@ const TrackGrievance = () => {
                 <Clock className="w-5 h-5 text-blue-600 mr-2" />
                 Timeline & Progress
               </h2>
-              
+
               <div className="relative">
                 {/* Timeline line */}
                 <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-                
+
                 <div className="space-y-6">
                   {trackingData.timeline.map((entry, index) => (
                     <div key={entry.id} className="relative flex items-start">
                       {/* Timeline dot */}
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-white ${getTimelineColor(entry.action, entry.actor_type)} z-10`}>
+                      <div
+                        className={`flex items-center justify-center w-8 h-8 rounded-full text-white ${getTimelineColor(
+                          entry.action,
+                          entry.actor_type
+                        )} z-10`}
+                      >
                         {getTimelineIcon(entry.action)}
                       </div>
-                      
+
                       {/* Content */}
                       <div className="ml-6 flex-1">
                         <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                           <div className="flex items-center justify-between mb-2">
                             <h3 className="font-semibold text-gray-800">
-                              {entry.action.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
+                              {entry.action
+                                .replace("_", " ")
+                                .toLowerCase()
+                                .replace(/\b\w/g, (l) => l.toUpperCase())}
                             </h3>
                             <span className="text-xs text-gray-500">
                               {formatDate(entry.timestamp)}
                             </span>
                           </div>
-                          
+
                           <p className="text-gray-700 text-sm mb-2">
                             {entry.description}
                           </p>
-                          
+
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               <User className="w-4 h-4 text-gray-400" />
@@ -552,14 +590,18 @@ const TrackGrievance = () => {
                                 </span>
                               </span>
                             </div>
-                            
+
                             {entry.status && (
-                              <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(entry.status)}`}>
-                                {entry.status.replace('_', ' ')}
+                              <span
+                                className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
+                                  entry.status
+                                )}`}
+                              >
+                                {entry.status.replace("_", " ")}
                               </span>
                             )}
                           </div>
-                          
+
                           {entry.notes && (
                             <div className="mt-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
                               <p className="text-sm text-blue-800">
@@ -585,20 +627,24 @@ const TrackGrievance = () => {
                 <Info className="w-5 h-5 text-blue-600 mr-2" />
                 Grievance Details
               </h3>
-              
+
               <div className="space-y-4">
                 <div>
                   <h4 className="font-semibold text-gray-700 mb-1">Subject</h4>
-                  <p className="text-gray-600 text-sm">{trackingData.grievance_details.subject}</p>
+                  <p className="text-gray-600 text-sm">
+                    {trackingData.grievance_details.subject}
+                  </p>
                 </div>
-                
+
                 <div>
-                  <h4 className="font-semibold text-gray-700 mb-1">Description</h4>
+                  <h4 className="font-semibold text-gray-700 mb-1">
+                    Description
+                  </h4>
                   <p className="text-gray-600 text-sm leading-relaxed">
                     {trackingData.grievance_details.description}
                   </p>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="flex items-center gap-1 text-gray-500 mb-1">
@@ -609,7 +655,7 @@ const TrackGrievance = () => {
                       {trackingData.grievance_details.rollno}
                     </span>
                   </div>
-                  
+
                   <div>
                     <span className="flex items-center gap-1 text-gray-500 mb-1">
                       <School className="w-3 h-3" />
@@ -619,7 +665,7 @@ const TrackGrievance = () => {
                       {trackingData.grievance_details.campus}
                     </span>
                   </div>
-                  
+
                   <div>
                     <span className="flex items-center gap-1 text-gray-500 mb-1">
                       <FileText className="w-3 h-3" />
@@ -629,18 +675,20 @@ const TrackGrievance = () => {
                       {trackingData.grievance_details.issue_type}
                     </span>
                   </div>
-                  
+
                   <div>
                     <span className="flex items-center gap-1 text-gray-500 mb-1">
                       <Calendar className="w-3 h-3" />
                       Submitted
                     </span>
                     <span className="font-medium text-gray-700">
-                      {new Date(trackingData.grievance_details.date_time).toLocaleDateString()}
+                      {new Date(
+                        trackingData.grievance_details.date_time
+                      ).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
-                
+
                 {trackingData.grievance_details.attachment === "true" && (
                   <div className="pt-3 border-t border-gray-200">
                     <div className="flex items-center justify-between">
@@ -662,7 +710,7 @@ const TrackGrievance = () => {
                   <User className="w-5 h-5 text-green-600 mr-2" />
                   Assigned Admin
                 </h3>
-                
+
                 <div className="space-y-3">
                   <div>
                     <h4 className="font-semibold text-gray-700">
@@ -672,7 +720,7 @@ const TrackGrievance = () => {
                       {trackingData.assigned_admin.role}
                     </p>
                   </div>
-                  
+
                   <div className="pt-3 border-t border-gray-200">
                     <a
                       href={`mailto:${trackingData.assigned_admin.contact}`}
@@ -688,8 +736,10 @@ const TrackGrievance = () => {
 
             {/* Quick Actions */}
             <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-blue-200/50 p-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Quick Actions</h3>
-              
+              <h3 className="text-lg font-bold text-gray-800 mb-4">
+                Quick Actions
+              </h3>
+
               <div className="space-y-3">
                 <Link
                   href="/history"
@@ -698,7 +748,7 @@ const TrackGrievance = () => {
                   <FileText className="w-4 h-4 mr-2" />
                   View All Grievances
                 </Link>
-                
+
                 <Link
                   href="/grievance/lodge"
                   className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
@@ -706,7 +756,7 @@ const TrackGrievance = () => {
                   <FileText className="w-4 h-4 mr-2" />
                   Lodge New Grievance
                 </Link>
-                
+
                 <button
                   onClick={handleManualRetry}
                   className="w-full flex items-center justify-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
