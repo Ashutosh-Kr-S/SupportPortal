@@ -1,4 +1,4 @@
-import { LayoutDashboard, Upload, History, LogOut, Search } from 'lucide-react';
+import { LayoutDashboard, Upload, History, LogOut, Search, Files } from 'lucide-react';
 
 export const NavItems = [
     {
@@ -16,7 +16,7 @@ export const NavItems = [
     {
         title: 'Grievance History',
         href: '/history',
-        icon: <History className="w-5 h-5" />,
+        icon: <Files className="w-5 h-5" />,
         position: 'top',
     },
     {

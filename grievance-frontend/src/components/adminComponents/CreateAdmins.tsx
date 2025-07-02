@@ -1,17 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   X,
   User,
-  Mail,
-  Phone,
   Shield,
   Building2,
-  Eye,
-  EyeOff,
-  Check,
   AlertCircle,
   MapPin,
+  Search,
+  ChevronDown,
 } from "lucide-react";
 import { campuses } from "../../types/AllCampus"; // Adjust the import path as needed
 
@@ -22,11 +19,7 @@ interface CreateAdminsProps {
 }
 
 interface AdminFormData {
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
+  nameOrEmail: string;
   role: string;
   campusId: number;
   isMainCampus: boolean;
@@ -38,61 +31,158 @@ const CreateAdmins: React.FC<CreateAdminsProps> = ({
   onSuccess,
 }) => {
   // Individual useStates for each field
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [nameOrEmail, setNameOrEmail] = useState("");
+  const [inputType, setInputType] = useState<"name" | "email">("name");
   const [role, setRole] = useState("academic");
   const [campusId, setCampusId] = useState(1011);
   const [isMainCampus, setIsMainCampus] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<Partial<AdminFormData>>({});
+
+  // Search functionality states
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+
+  // Dummy data for suggestions - Indian names and emails
+  const dummyNames = [
+    "Arjun Sharma",
+    "Priya Patel",
+    "Vikram Singh",
+    "Sneha Gupta",
+    "Rajesh Kumar",
+    "Kavya Reddy",
+    "Amit Agarwal",
+    "Pooja Mehta",
+    "Rohit Verma",
+    "Ananya Joshi",
+    "Karan Malhotra",
+    "Shreya Kapoor",
+    "Nikhil Shah",
+    "Rhea Nair",
+    "Arun Pillai",
+    "Isha Bansal",
+    "Siddharth Rao",
+    "Tanvi Jain",
+    "Varun Iyer",
+    "Meera Srinivasan",
+    "Aryan Khanna",
+    "Diya Chopra",
+    "Manish Tiwari",
+    "Kritika Bhatia",
+    "Abhishek Dubey",
+    "Nisha Pandey",
+    "Ravi Chandra",
+    "Sakshi Mishra",
+    "Deepak Yadav",
+    "Ritika Aggarwal",
+  ];
+
+  const dummyEmails = [
+    "arjun.sharma@university.edu",
+    "priya.patel@university.edu",
+    "vikram.singh@university.edu",
+    "sneha.gupta@university.edu",
+    "rajesh.kumar@university.edu",
+    "kavya.reddy@university.edu",
+    "amit.agarwal@university.edu",
+    "pooja.mehta@university.edu",
+    "rohit.verma@university.edu",
+    "ananya.joshi@university.edu",
+    "karan.malhotra@university.edu",
+    "shreya.kapoor@university.edu",
+    "nikhil.shah@university.edu",
+    "rhea.nair@university.edu",
+    "arun.pillai@university.edu",
+    "isha.bansal@university.edu",
+    "siddharth.rao@university.edu",
+    "tanvi.jain@university.edu",
+    "varun.iyer@university.edu",
+    "meera.srinivasan@university.edu",
+    "aryan.khanna@university.edu",
+    "diya.chopra@university.edu",
+    "manish.tiwari@university.edu",
+    "kritika.bhatia@university.edu",
+    "abhishek.dubey@university.edu",
+    "nisha.pandey@university.edu",
+    "ravi.chandra@university.edu",
+    "sakshi.mishra@university.edu",
+    "deepak.yadav@university.edu",
+    "ritika.aggarwal@university.edu",
+  ];
 
   // Role options (only academic, exam, campus)
   const roles = [
     { value: "campus", label: "Campus" },
     { value: "academic", label: "Academic" },
     { value: "exam", label: "Examination" },
-    {value: "non-academic", label: "Non-Academic " },
+    { value: "non-academic", label: "Non-Academic " },
   ];
+
+  // Search functionality
+  const handleSearchChange = (value: string) => {
+    setNameOrEmail(value);
+    setSearchTerm(value);
+
+    if (value.length > 0) {
+      const suggestions = inputType === "name" ? dummyNames : dummyEmails;
+      const filtered = suggestions
+        .filter((item) => item.toLowerCase().includes(value.toLowerCase()))
+        .slice(0, 5); // Limit to 5 suggestions for performance
+
+      setFilteredSuggestions(filtered);
+      setShowDropdown(true);
+    } else {
+      setShowDropdown(false);
+      setFilteredSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setNameOrEmail(suggestion);
+    setSearchTerm(suggestion);
+    setShowDropdown(false);
+    setFilteredSuggestions([]);
+
+    // Clear any existing errors
+    if (errors.nameOrEmail) {
+      setErrors((prev) => ({
+        ...prev,
+        nameOrEmail: undefined,
+      }));
+    }
+  };
+
+  const handleInputTypeChange = (newType: "name" | "email") => {
+    setInputType(newType);
+    setNameOrEmail("");
+    setSearchTerm("");
+    setShowDropdown(false);
+    setFilteredSuggestions([]);
+
+    // Clear any existing errors
+    if (errors.nameOrEmail) {
+      setErrors((prev) => ({
+        ...prev,
+        nameOrEmail: undefined,
+      }));
+    }
+  };
 
   // Validation function
   const validateForm = (): boolean => {
     const newErrors: Partial<AdminFormData> = {};
 
-    if (!name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (name.trim().length < 2) {
-      newErrors.name = "Name must be at least 2 characters";
-    }
-
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-
-    if (!phone.trim()) {
-      newErrors.phone = "Phone number is required";
-    } else if (!/^[+]?[\d\s\-()]{10,}$/.test(phone)) {
-      newErrors.phone = "Please enter a valid phone number";
-    }
-
-    if (!password) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-      newErrors.password =
-        "Password must contain uppercase, lowercase, and number";
-    }
-
-    if (password !== confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
+    if (!nameOrEmail.trim()) {
+      newErrors.nameOrEmail = "Name or Email is required";
+    } else if (inputType === "name" && nameOrEmail.trim().length < 2) {
+      newErrors.nameOrEmail = "Name must be at least 2 characters";
+    } else if (
+      inputType === "email" &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(nameOrEmail)
+    ) {
+      newErrors.nameOrEmail = "Please enter a valid email address";
     }
 
     setErrors(newErrors);
@@ -105,20 +195,8 @@ const CreateAdmins: React.FC<CreateAdminsProps> = ({
     value: string | number | boolean
   ) => {
     switch (field) {
-      case "name":
-        setName(value as string);
-        break;
-      case "email":
-        setEmail(value as string);
-        break;
-      case "phone":
-        setPhone(value as string);
-        break;
-      case "password":
-        setPassword(value as string);
-        break;
-      case "confirmPassword":
-        setConfirmPassword(value as string);
+      case "nameOrEmail":
+        setNameOrEmail(value as string);
         break;
       case "role":
         setRole(value as string);
@@ -161,11 +239,9 @@ const CreateAdmins: React.FC<CreateAdminsProps> = ({
     try {
       // Prepare the API payload according to your specified structure
       const payload = {
-        name: name.trim(),
-        email: email.trim().toLowerCase(),
-        password: password,
+        [inputType]: nameOrEmail.trim(),
         role: role,
-        department: role === 'academic' ? 'academic' : role,
+        department: role === "academic" ? "academic" : role,
         campusId: campusId,
         isMainCampus: isMainCampus,
       };
@@ -195,14 +271,14 @@ const CreateAdmins: React.FC<CreateAdminsProps> = ({
       alert("Admin created successfully!");
 
       // Reset all fields
-      setName("");
-      setEmail("");
-      setPhone("");
-      setPassword("");
-      setConfirmPassword("");
+      setNameOrEmail("");
+      setInputType("name");
       setRole("academic");
       setCampusId(1011);
       setIsMainCampus(false);
+      setSearchTerm("");
+      setShowDropdown(false);
+      setFilteredSuggestions([]);
 
       // Clear any existing errors
       setErrors({});
@@ -211,33 +287,13 @@ const CreateAdmins: React.FC<CreateAdminsProps> = ({
       onClose();
     } catch (error: unknown) {
       console.error("Error creating admin:", error);
-      alert((error as Error)?.message || "Failed to create admin. Please try again.");
+      alert(
+        (error as Error)?.message || "Failed to create admin. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
-
-  // Password strength indicator
-  const getPasswordStrength = (password: string) => {
-    if (!password) return { strength: 0, label: "", color: "" };
-
-    let strength = 0;
-    if (password.length >= 8) strength++;
-    if (/[a-z]/.test(password)) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/\d/.test(password)) strength++;
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength++;
-
-    if (strength <= 2)
-      return { strength, label: "Weak", color: "text-red-500" };
-    if (strength <= 3)
-      return { strength, label: "Fair", color: "text-yellow-500" };
-    if (strength <= 4)
-      return { strength, label: "Good", color: "text-blue-500" };
-    return { strength, label: "Strong", color: "text-green-500" };
-  };
-
-  const passwordStrength = getPasswordStrength(password);
 
   if (!isOpen) return null;
 
@@ -273,74 +329,96 @@ const CreateAdmins: React.FC<CreateAdminsProps> = ({
               Personal Information
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Full Name */}
-              <div>
+            <div className="grid grid-cols-1 gap-4">
+              {/* Name or Email Field with Search */}
+              <div className="relative">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name *
+                  {inputType === "name" ? "Full Name" : "Email Address"} *
                 </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
-                    errors.name ? "border-red-500" : "border-gray-300"
-                  }`}
-                  placeholder="Enter full name"
-                />
-                {errors.name && (
+                <div className="flex gap-2">
+                  <select
+                    value={inputType}
+                    onChange={(e) =>
+                      handleInputTypeChange(e.target.value as "name" | "email")
+                    }
+                    className="px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white"
+                  >
+                    <option value="name">Name</option>
+                    <option value="email">Email</option>
+                  </select>
+                  <div className="relative flex-1">
+                    <div className="relative">
+                      <input
+                        type={inputType === "email" ? "email" : "text"}
+                        value={nameOrEmail}
+                        onChange={(e) => handleSearchChange(e.target.value)}
+                        onFocus={() => {
+                          if (filteredSuggestions.length > 0) {
+                            setShowDropdown(true);
+                          }
+                        }}
+                        onBlur={() => {
+                          // Delay hiding dropdown to allow clicking on suggestions
+                          setTimeout(() => setShowDropdown(false), 200);
+                        }}
+                        className={`w-full px-4 py-3 pr-10 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
+                          errors.nameOrEmail
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        }`}
+                        placeholder={
+                          inputType === "name"
+                            ? "Search or enter full name..."
+                            : "Search or enter email address..."
+                        }
+                        autoComplete="off"
+                      />
+                      <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    </div>
+
+                    {/* Search Dropdown */}
+                    {showDropdown && filteredSuggestions.length > 0 && (
+                      <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                        {filteredSuggestions.map((suggestion, index) => (
+                          <button
+                            key={index}
+                            type="button"
+                            onClick={() => handleSuggestionClick(suggestion)}
+                            className="w-full px-4 py-3 text-left hover:bg-purple-50 hover:text-purple-700 focus:bg-purple-50 focus:text-purple-700 focus:outline-none transition-colors duration-150 border-b border-gray-100 last:border-b-0"
+                          >
+                            <div className="flex items-center">
+                              {inputType === "name" ? (
+                                <User className="w-4 h-4 mr-2 text-gray-400" />
+                              ) : (
+                                <div className="w-4 h-4 mr-2 text-gray-400">
+                                  @
+                                </div>
+                              )}
+                              <span className="text-sm">{suggestion}</span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {errors.nameOrEmail && (
                   <p className="mt-1 text-sm text-red-600 flex items-center">
                     <AlertCircle className="w-4 h-4 mr-1" />
-                    {errors.name}
+                    {errors.nameOrEmail}
                   </p>
                 )}
-              </div>
 
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <Mail className="w-4 h-4 inline mr-1" />
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
-                    errors.email ? "border-red-500" : "border-gray-300"
-                  }`}
-                  placeholder="admin@university.edu"
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
-                    <AlertCircle className="w-4 h-4 mr-1" />
-                    {errors.email}
-                  </p>
-                )}
+                {/* Show suggestion count when typing */}
+                {searchTerm &&
+                  filteredSuggestions.length > 0 &&
+                  !showDropdown && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      {filteredSuggestions.length} suggestion
+                      {filteredSuggestions.length !== 1 ? "s" : ""} available
+                    </p>
+                  )}
               </div>
-            </div>
-
-            {/* Phone Number */}
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Phone className="w-4 h-4 inline mr-1" />
-                Phone Number *
-              </label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
-                  errors.phone ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="+91 "
-              />
-              {errors.phone && (
-                <p className="mt-1 text-sm text-red-600 flex items-center">
-                  <AlertCircle className="w-4 h-4 mr-1" />
-                  {errors.phone}
-                </p>
-              )}
             </div>
           </div>
 
@@ -403,124 +481,6 @@ const CreateAdmins: React.FC<CreateAdminsProps> = ({
                   {isMainCampus ? "Main Campus" : "Branch Campus"}
                 </span>
               </span>
-            </div>
-          </div>
-
-          {/* Security Section */}
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <Shield className="w-5 h-5 mr-2 text-purple-600" />
-              Security & Access
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Password */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password *
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) =>
-                      handleInputChange("password", e.target.value)
-                    }
-                    className={`w-full px-4 py-3 pr-12 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
-                      errors.password ? "border-red-500" : "border-gray-300"
-                    }`}
-                    placeholder="Enter secure password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-5 h-5" />
-                    ) : (
-                      <Eye className="w-5 h-5" />
-                    )}
-                  </button>
-                </div>
-                {password && (
-                  <div className="mt-2 flex items-center space-x-2">
-                    <div className="flex-1 bg-gray-200 rounded-full h-2">
-                      <div
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          passwordStrength.strength <= 2
-                            ? "bg-red-500"
-                            : passwordStrength.strength <= 3
-                            ? "bg-yellow-500"
-                            : passwordStrength.strength <= 4
-                            ? "bg-blue-500"
-                            : "bg-green-500"
-                        }`}
-                        style={{
-                          width: `${(passwordStrength.strength / 5) * 100}%`,
-                        }}
-                      ></div>
-                    </div>
-                    <span
-                      className={`text-sm font-medium ${passwordStrength.color}`}
-                    >
-                      {passwordStrength.label}
-                    </span>
-                  </div>
-                )}
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
-                    <AlertCircle className="w-4 h-4 mr-1" />
-                    {errors.password}
-                  </p>
-                )}
-              </div>
-
-              {/* Confirm Password */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Confirm Password *
-                </label>
-                <div className="relative">
-                  <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) =>
-                      handleInputChange("confirmPassword", e.target.value)
-                    }
-                    className={`w-full px-4 py-3 pr-12 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
-                      errors.confirmPassword
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    }`}
-                    placeholder="Confirm password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="w-5 h-5" />
-                    ) : (
-                      <Eye className="w-5 h-5" />
-                    )}
-                  </button>
-                </div>
-                {confirmPassword &&
-                  password === confirmPassword && (
-                    <p className="mt-1 text-sm text-green-600 flex items-center">
-                      <Check className="w-4 h-4 mr-1" />
-                      Passwords match
-                    </p>
-                  )}
-                {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
-                    <AlertCircle className="w-4 h-4 mr-1" />
-                    {errors.confirmPassword}
-                  </p>
-                )}
-              </div>
             </div>
           </div>
 
