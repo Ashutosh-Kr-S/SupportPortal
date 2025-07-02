@@ -67,8 +67,8 @@ const History = () => {
   };
 
   const handleTrack = (id: string) => {
-    // Add tracking functionality here
-    console.log("Tracking grievance:", id);
+    // Redirect to track page with grievance ID
+    window.location.href = `/track?id=${id}`;
   };
 
   useEffect(() => {
