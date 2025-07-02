@@ -1,25 +1,26 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   CircleUserRound,
   Settings,
   LogOut,
   User,
-  Bell,
-  Menu,
-  X,
+  Bell
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { StudentInfo } from "../../types/StudentInfo";
 import { AdminInfo } from "../../types/admin-info";
+
 
 interface NavbarProps {
   className?: string;
 }
 
 const Navbar = ({ className = "" }: NavbarProps) => {
-  const { user, loading, userType } = useAuth();
+  const { user, loading, userType, logout } = useAuth();
+  const router = useRouter();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -202,7 +203,10 @@ const Navbar = ({ className = "" }: NavbarProps) => {
 
               {/* Menu Items */}
               <div className="py-2">
-                <button className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
+                <button
+                  className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
+                  onClick={() => router.push("/profile")}
+                >
                   <User className="w-4 h-4 mr-3 text-blue-500" />
                   Profile
                 </button>
@@ -211,7 +215,8 @@ const Navbar = ({ className = "" }: NavbarProps) => {
                   Settings
                 </button>
                 <div className="border-t border-blue-100 my-2"></div>
-                <button className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                <button className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                onClick={logout}>
                   <LogOut className="w-4 h-4 mr-3" />
                   Logout
                 </button>
