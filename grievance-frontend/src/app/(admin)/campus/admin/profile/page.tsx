@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
-import { 
-  CircleUserRound, 
-  Mail, 
-  Phone, 
-  User, 
-  IdCard, 
-  Building2, 
-  ShieldCheck, 
+import {
+  CircleUserRound,
+  Mail,
+  Phone,
+  User,
+  IdCard,
+  Building2,
+  ShieldCheck,
   Calendar,
   MapPin,
   Award,
@@ -16,21 +16,21 @@ import {
   Download
 } from "lucide-react";
 
-const dummyAdmin = {
-  name: "Dr. Anil Kumar",
-  adminId: "SUPER2025",
-  email: "anil.kumar@dseu.ac.in",
-  phone: "+91 9876501234",
-  role: "Super Admin",
-  campus: "DSEU Headquarters",
-  department: "Central Administration",
-  joinDate: "August 2021",
-  lastLogin: "Today, 11:10 AM",
-  permissions: 99,
-  managedUsers: 1200
+const dummyCampusAdmin = {
+  name: "Aditya Sharma",
+  adminId: "CAMPUS2025",
+  email: "aditya.sharma@dseu.ac.in",
+  phone: "+91 9876512345",
+  role: "Campus Admin",
+  campus: "DSEU Okhla Campus",
+  department: "Campus Administration",
+  joinDate: "July 2022",
+  lastLogin: "Today, 10:30 AM",
+  permissions: 45,
+  managedUsers: 350
 };
 
-export default function AdminProfilePage() {
+export default function CampusAdminProfilePage() {
   return (
     <div className="min-h-screen w-full p-4 sm:p-6 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/30">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -42,7 +42,7 @@ export default function AdminProfilePage() {
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
             }}></div>
           </div>
-          
+
           <div className="relative flex flex-col md:flex-row items-center gap-8">
             {/* Enhanced Avatar */}
             <div className="relative">
@@ -61,7 +61,7 @@ export default function AdminProfilePage() {
             <div className="flex-1 text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                  {dummyAdmin.name}
+                  {dummyCampusAdmin.name}
                 </h1>
                 <Award className="w-8 h-8 text-yellow-400" />
               </div>
@@ -69,22 +69,22 @@ export default function AdminProfilePage() {
               <div className="flex flex-col md:flex-row md:items-center md:gap-6 gap-2 text-blue-100 mb-4">
                 <span className="flex items-center justify-center md:justify-start gap-2">
                   <IdCard className="w-5 h-5" />
-                  <span className="text-lg font-medium">{dummyAdmin.adminId}</span>
+                  <span className="text-lg font-medium">{dummyCampusAdmin.adminId}</span>
                 </span>
                 <span className="flex items-center justify-center md:justify-start gap-2">
                   <ShieldCheck className="w-5 h-5" />
-                  <span className="text-lg font-medium">{dummyAdmin.role}</span>
+                  <span className="text-lg font-medium">{dummyCampusAdmin.role}</span>
                 </span>
               </div>
 
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-6">
                 <div className="text-center p-3 bg-white/10 rounded-lg backdrop-blur-sm">
-                  <div className="text-2xl font-bold text-white">{dummyAdmin.permissions}</div>
+                  <div className="text-2xl font-bold text-white">{dummyCampusAdmin.permissions}</div>
                   <div className="text-sm text-blue-200">Permissions</div>
                 </div>
                 <div className="text-center p-3 bg-white/10 rounded-lg backdrop-blur-sm">
-                  <div className="text-2xl font-bold text-white">{dummyAdmin.managedUsers}</div>
+                  <div className="text-2xl font-bold text-white">{dummyCampusAdmin.managedUsers}</div>
                   <div className="text-sm text-blue-200">Managed Users</div>
                 </div>
               </div>
@@ -112,8 +112,8 @@ export default function AdminProfilePage() {
             icon={<Mail className="w-5 h-5" />}
             gradient="from-blue-500 to-blue-600"
           >
-            <ProfileField icon={<Mail />} label="Email Address" value={dummyAdmin.email} />
-            <ProfileField icon={<Phone />} label="Phone Number" value={dummyAdmin.phone} />
+            <ProfileField icon={<Mail />} label="Email Address" value={dummyCampusAdmin.email} />
+            <ProfileField icon={<Phone />} label="Phone Number" value={dummyCampusAdmin.phone} />
           </InfoCard>
 
           {/* Work Information */}
@@ -122,8 +122,8 @@ export default function AdminProfilePage() {
             icon={<Building2 className="w-5 h-5" />}
             gradient="from-purple-500 to-purple-600"
           >
-            <ProfileField icon={<Building2 />} label="Campus" value={dummyAdmin.campus} />
-            <ProfileField icon={<User />} label="Department" value={dummyAdmin.department} />
+            <ProfileField icon={<Building2 />} label="Campus" value={dummyCampusAdmin.campus} />
+            <ProfileField icon={<User />} label="Department" value={dummyCampusAdmin.department} />
           </InfoCard>
 
           {/* Activity Information */}
@@ -132,8 +132,8 @@ export default function AdminProfilePage() {
             icon={<Calendar className="w-5 h-5" />}
             gradient="from-green-500 to-green-600"
           >
-            <ProfileField icon={<Calendar />} label="Join Date" value={dummyAdmin.joinDate} />
-            <ProfileField icon={<MapPin />} label="Last Login" value={dummyAdmin.lastLogin} />
+            <ProfileField icon={<Calendar />} label="Join Date" value={dummyCampusAdmin.joinDate} />
+            <ProfileField icon={<MapPin />} label="Last Login" value={dummyCampusAdmin.lastLogin} />
           </InfoCard>
         </div>
 
@@ -153,15 +153,15 @@ export default function AdminProfilePage() {
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  Manage users and roles
+                  Manage campus users and roles
                 </li>
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  Access all campus data
+                  Access campus data
                 </li>
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  Configure portal settings
+                  Configure campus settings
                 </li>
               </ul>
             </div>
@@ -173,15 +173,15 @@ export default function AdminProfilePage() {
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  Oversee grievance redressal process
+                  Oversee campus grievance process
                 </li>
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  Approve/reject applications
+                  Approve/reject campus applications
                 </li>
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  Generate reports and analytics
+                  Generate campus reports
                 </li>
               </ul>
             </div>

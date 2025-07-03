@@ -221,8 +221,46 @@ const Navbar = ({ className = "" }: NavbarProps) => {
                 <button
                   className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
                   onClick={() => {
-                    if (userType === "admin") {
+                    if (
+                      userType === "admin" &&
+                      getUserRole() === "Super Admin"
+                    ) {
                       router.push("/adminprofile");
+                    } else if (
+                      userType === "admin" &&
+                      getUserRole() === "Campus Admin"
+                    ) {
+                      router.push("/campus/admin/profile");
+                    } else if (
+                      userType === "admin" &&
+                      getUserRole() === "Campus Examination"
+                    ) {
+                      router.push("/campus/exam/profile");
+                    } else if (
+                      userType === "admin" &&
+                      getUserRole() === "Campus Academic"
+                    ) {
+                      router.push("/campus/academic/profile");
+                    } else if (
+                      userType === "admin" &&
+                      getUserRole() === "Campus Non-Academic"
+                    ) {
+                      router.push("/campus/nonAcademic/profile");
+                    } else if (
+                      userType === "admin" &&
+                      getUserRole() === "University Non-Academic"
+                    ) {
+                      router.push("/university/nonAcademic/profile");
+                    } else if (
+                      userType === "admin" &&
+                      getUserRole() === "University Academic"
+                    ) {
+                      router.push("/university/academic/profile");
+                    } else if (
+                      userType === "admin" &&
+                      getUserRole() === "University Examination"
+                    ) {
+                      router.push("/university/exam/profile");
                     } else if (userType === "student") {
                       router.push("/profile");
                     } else {

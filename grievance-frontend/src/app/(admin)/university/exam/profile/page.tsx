@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { 
   CircleUserRound, 
   Mail, 
@@ -16,25 +15,25 @@ import {
   Download
 } from "lucide-react";
 
-const dummyAdmin = {
-  name: "Dr. Anil Kumar",
-  adminId: "SUPER2025",
-  email: "anil.kumar@dseu.ac.in",
-  phone: "+91 9876501234",
-  role: "Super Admin",
-  campus: "DSEU Headquarters",
-  department: "Central Administration",
-  joinDate: "August 2021",
-  lastLogin: "Today, 11:10 AM",
-  permissions: 99,
-  managedUsers: 1200
+const dummyUniversityExamAdmin = {
+  name: "Rohan Gupta",
+  adminId: "UNIEXAM2025",
+  email: "rohan.gupta@dseu.ac.in",
+  phone: "+91 9876567890",
+  role: "University Examination Admin",
+  campus: "DSEU University Headquarters",
+  department: "University Examination Department",
+  joinDate: "February 2022",
+  lastLogin: "Today, 08:30 AM",
+  permissions: 40,
+  managedUsers: 300
 };
 
-export default function AdminProfilePage() {
+export default function UniversityExamAdminProfilePage() {
   return (
     <div className="min-h-screen w-full p-4 sm:p-6 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/30">
       <div className="max-w-4xl mx-auto space-y-6">
-        {/* Enhanced Header */}
+        {/* Header */}
         <div className="relative bg-gradient-to-r from-blue-700 via-blue-800 to-purple-800 rounded-2xl p-8 text-white shadow-2xl overflow-hidden">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-40">
@@ -42,9 +41,8 @@ export default function AdminProfilePage() {
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
             }}></div>
           </div>
-          
           <div className="relative flex flex-col md:flex-row items-center gap-8">
-            {/* Enhanced Avatar */}
+            {/* Avatar */}
             <div className="relative">
               <div className="w-32 h-32 bg-gradient-to-br from-white/20 to-white/10 rounded-full p-1 backdrop-blur-sm border border-white/20 shadow-xl">
                 <div className="w-full h-full bg-gradient-to-br from-white/90 to-white/70 rounded-full flex items-center justify-center shadow-inner">
@@ -56,40 +54,36 @@ export default function AdminProfilePage() {
                 <div className="w-3 h-3 bg-green-300 rounded-full animate-pulse"></div>
               </div>
             </div>
-
-            {/* Enhanced User Info */}
+            {/* User Info */}
             <div className="flex-1 text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                  {dummyAdmin.name}
+                  {dummyUniversityExamAdmin.name}
                 </h1>
                 <Award className="w-8 h-8 text-yellow-400" />
               </div>
-              
               <div className="flex flex-col md:flex-row md:items-center md:gap-6 gap-2 text-blue-100 mb-4">
                 <span className="flex items-center justify-center md:justify-start gap-2">
                   <IdCard className="w-5 h-5" />
-                  <span className="text-lg font-medium">{dummyAdmin.adminId}</span>
+                  <span className="text-lg font-medium">{dummyUniversityExamAdmin.adminId}</span>
                 </span>
                 <span className="flex items-center justify-center md:justify-start gap-2">
                   <ShieldCheck className="w-5 h-5" />
-                  <span className="text-lg font-medium">{dummyAdmin.role}</span>
+                  <span className="text-lg font-medium">{dummyUniversityExamAdmin.role}</span>
                 </span>
               </div>
-
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-6">
                 <div className="text-center p-3 bg-white/10 rounded-lg backdrop-blur-sm">
-                  <div className="text-2xl font-bold text-white">{dummyAdmin.permissions}</div>
+                  <div className="text-2xl font-bold text-white">{dummyUniversityExamAdmin.permissions}</div>
                   <div className="text-sm text-blue-200">Permissions</div>
                 </div>
                 <div className="text-center p-3 bg-white/10 rounded-lg backdrop-blur-sm">
-                  <div className="text-2xl font-bold text-white">{dummyAdmin.managedUsers}</div>
+                  <div className="text-2xl font-bold text-white">{dummyUniversityExamAdmin.managedUsers}</div>
                   <div className="text-sm text-blue-200">Managed Users</div>
                 </div>
               </div>
             </div>
-
             {/* Action Buttons */}
             <div className="flex flex-col gap-2">
               <button className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg backdrop-blur-sm transition-all duration-200 border border-white/20">
@@ -103,8 +97,7 @@ export default function AdminProfilePage() {
             </div>
           </div>
         </div>
-
-        {/* Enhanced Info Cards Grid */}
+        {/* Info Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Contact Information */}
           <InfoCard 
@@ -112,34 +105,31 @@ export default function AdminProfilePage() {
             icon={<Mail className="w-5 h-5" />}
             gradient="from-blue-500 to-blue-600"
           >
-            <ProfileField icon={<Mail />} label="Email Address" value={dummyAdmin.email} />
-            <ProfileField icon={<Phone />} label="Phone Number" value={dummyAdmin.phone} />
+            <ProfileField icon={<Mail />} label="Email Address" value={dummyUniversityExamAdmin.email} />
+            <ProfileField icon={<Phone />} label="Phone Number" value={dummyUniversityExamAdmin.phone} />
           </InfoCard>
-
           {/* Work Information */}
           <InfoCard 
             title="Work Information" 
             icon={<Building2 className="w-5 h-5" />}
             gradient="from-purple-500 to-purple-600"
           >
-            <ProfileField icon={<Building2 />} label="Campus" value={dummyAdmin.campus} />
-            <ProfileField icon={<User />} label="Department" value={dummyAdmin.department} />
+            <ProfileField icon={<Building2 />} label="Campus" value={dummyUniversityExamAdmin.campus} />
+            <ProfileField icon={<User />} label="Department" value={dummyUniversityExamAdmin.department} />
           </InfoCard>
-
           {/* Activity Information */}
           <InfoCard 
             title="Activity Information" 
             icon={<Calendar className="w-5 h-5" />}
             gradient="from-green-500 to-green-600"
           >
-            <ProfileField icon={<Calendar />} label="Join Date" value={dummyAdmin.joinDate} />
-            <ProfileField icon={<MapPin />} label="Last Login" value={dummyAdmin.lastLogin} />
+            <ProfileField icon={<Calendar />} label="Join Date" value={dummyUniversityExamAdmin.joinDate} />
+            <ProfileField icon={<MapPin />} label="Last Login" value={dummyUniversityExamAdmin.lastLogin} />
           </InfoCard>
         </div>
-
-        {/* Enhanced Privileges Card */}
+        {/* Privileges Card */}
         <InfoCard 
-          title="Administrative Privileges" 
+          title="University Exam Privileges" 
           icon={<ShieldCheck className="w-5 h-5" />}
           gradient="from-red-500 to-red-600"
           fullWidth
@@ -148,40 +138,40 @@ export default function AdminProfilePage() {
             <div>
               <h4 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
                 <Settings className="w-4 h-4" />
-                System Management
+                Exam Management
               </h4>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  Manage users and roles
+                  Manage university exam schedules
                 </li>
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  Access all campus data
+                  Oversee university exam results
                 </li>
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  Configure portal settings
+                  Coordinate with university examiners
                 </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
                 <User className="w-4 h-4" />
-                User Management
+                Student Management
               </h4>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  Oversee grievance redressal process
+                  Address university exam-related grievances
                 </li>
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  Approve/reject applications
+                  Approve university exam applications
                 </li>
                 <li className="flex items-center gap-2 text-gray-700">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  Generate reports and analytics
+                  Generate university exam reports
                 </li>
               </ul>
             </div>
@@ -235,3 +225,5 @@ function ProfileField({ label, value, icon }: Readonly<ProfileFieldProps>) {
     </div>
   );
 }
+
+
